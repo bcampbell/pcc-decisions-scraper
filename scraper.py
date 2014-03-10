@@ -353,7 +353,7 @@ def sanity_check(data):
 # ----- START -----
 
 
-TESTING = True
+TESTING = False
 
 if TESTING:
     case_urls = find_cases()
