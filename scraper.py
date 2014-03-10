@@ -143,6 +143,7 @@ def extract_pubdate( pubdate_str ):
     dt = dateutil.parser.parse( pubdate_str, dayfirst=True )  # fuzzy=True
     if dt is None:
         print "BAD: ", pubdate_str 
+        pass
 
     return dt
 
@@ -339,6 +340,7 @@ def tidy_complainant_name(name,publication):
 
     if name != oldname:
         print( "TIDY complainant name '%s' => '%s'" % (oldname, name) )
+        pass
     return name
 
 
@@ -351,7 +353,7 @@ def sanity_check(data):
 # ----- START -----
 
 
-TESTING = False
+TESTING = True
 
 if TESTING:
     case_urls = find_cases()
@@ -375,11 +377,11 @@ print "found %d cases" % ( len(case_urls), )
 all_fields = set()
 
 
-
 errcnt = 0
 for case_url in case_urls:
     article_id = extract_article_id(case_url)
-    rows = scraperwiki.sqlite.select("id from swdata WHERE id=?", (article_id,), verbose=0)
+
+    rows = scraperwiki.sqlite.select("id from data WHERE id=?", (article_id,), verbose=0)
     if len(rows)>0:
         print "got ", case_url, " already"
         continue
@@ -393,7 +395,6 @@ for case_url in case_urls:
                 scraperwiki.sqlite.save(['id'], data)
             for f in data.keys():
                 all_fields.add(f)
-        #pprint(data)
 
     except Exception, e:
         print "ERROR scraping %s: %s" %( case_url, e.message )
@@ -402,7 +403,7 @@ for case_url in case_urls:
             print "BAILING OUT - too many errors."
             raise
 
-print "all fields: ", all_fields
+#print "all fields: ", all_fields
 
 
 
